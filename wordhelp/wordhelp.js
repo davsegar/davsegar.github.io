@@ -77,7 +77,7 @@ function actualizar()
 {
 	var dicc = diccionario;
 
-	var contiene = $input_contiene.value;
+	var contiene = $input_contiene.value.toLowerCase();
 	if (contiene)
 	{
 		for (const letra of contiene) {
@@ -85,7 +85,7 @@ function actualizar()
 		}
 	}
 
-	var no_contiene = $input_no_contiene.value;
+	var no_contiene = $input_no_contiene.value.toLowerCase();
 	if (no_contiene)
 	{
 		for (const letra of no_contiene) {
