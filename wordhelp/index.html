@@ -8,22 +8,50 @@
 </head>
 <body>
 	<div class="container mt-3">
-		<h3>Word Help V0.1 Beta</h3>
-		<div class="mb-3">
-			<label for="input_contiene" class="form-label">Contiene</label>
-			<input type="text" class="form-control" id="input_contiene" pattern="[A-Za-zÑñ]*" oninput="this.reportValidity(); actualizar();" title="Letras de la A a la Z sin acentos">
+		<h3>Word Help V0.2 Beta</h3>
+		<div class="card mb-3 bg-warning bg-gradient" style="--bs-bg-opacity: .75;">
+			<div class="card-body">
+				<h5 class="card-title">Contiene</h5>
+				<input type="text" class="form-control" id="input_contiene" pattern="[A-Za-zÑñ]*" oninput="this.reportValidity();" data-actualizar title="Letras de la A a la Z sin acentos ni espacios">
+			</div>
 		</div>
-		<div class="mb-3">
-			<label for="input_no_contiene" class="form-label">No Contiene</label>
-			<input type="text" class="form-control" id="input_no_contiene" pattern="[A-Za-zÑñ]*" oninput="this.reportValidity(); actualizar();" title="Letras de la A a la Z sin acentos">
+		<div class="card mb-3 bg-secondary bg-gradient" style="--bs-bg-opacity: .75;">
+			<div class="card-body">
+				<h5 class="card-title">No Contiene</h5>
+				<input type="text" class="form-control" id="input_no_contiene" pattern="[A-Za-zÑñ]*" oninput="this.reportValidity();" data-actualizar title="Letras de la A a la Z sin acentos ni espacios">
+			</div>
 		</div>
-		<div class="mb-3">
-			<label for="input_sugerencias" class="form-label">Sugerencias</label>
-			<input type="text" class="form-control" id="input_sugerencias" readonly>
+		<div class="card mb-3 bg-success bg-gradient" style="--bs-bg-opacity: .75;">
+			<div class="card-body">
+				<h5 class="card-title">Letras Exactas</h5>
+				<div class="d-flex">
+					<div>
+						<input type="text" class="form-control" id="input_letra_1" pattern="[A-Za-zÑñ]{1}" oninput="this.reportValidity();" data-actualizar title="Una letra de la A a la Z sin acentos" maxlength="1">
+					</div>
+					<div class="ps-2">
+						<input type="text" class="form-control" id="input_letra_2" pattern="[A-Za-zÑñ]{1}" oninput="this.reportValidity();" data-actualizar title="Una letra de la A a la Z sin acentos" maxlength="1">
+					</div>
+					<div class="ps-2">
+						<input type="text" class="form-control" id="input_letra_3" pattern="[A-Za-zÑñ]{1}" oninput="this.reportValidity();" data-actualizar title="Una letra de la A a la Z sin acentos" maxlength="1">
+					</div>
+					<div class="ps-2">
+						<input type="text" class="form-control" id="input_letra_4" pattern="[A-Za-zÑñ]{1}" oninput="this.reportValidity();" data-actualizar title="Una letra de la A a la Z sin acentos" maxlength="1">
+					</div>
+					<div class="ps-2">
+						<input type="text" class="form-control" id="input_letra_5" pattern="[A-Za-zÑñ]{1}" oninput="this.reportValidity();" data-actualizar title="Una letra de la A a la Z sin acentos" maxlength="1">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card mb-3">
+			<div class="card-body">
+				<h5 class="card-title">Sugerencias</h5>
+				<input type="text" class="form-control" id="input_sugerencias" readonly>
+			</div>
 		</div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<script src="diccionario.js"></script>
-	<script src="wordhelp.js"></script>
+	<script src="wordhelp.js?v=2"></script>
 </body>
 </html>
