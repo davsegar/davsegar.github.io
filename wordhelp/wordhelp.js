@@ -123,6 +123,7 @@ function actualizar()
 		var contiene = $input_contiene.value.toLowerCase();
 		if (contiene)
 		{
+			$input_contiene.value = contiene.toUpperCase();
 			for (const letra of contiene) {
 				dicc = diccionario_contiene_letra(dicc, letra);
 			}
@@ -135,6 +136,7 @@ function actualizar()
 		var no_contiene = $input_no_contiene.value.toLowerCase();
 		if (no_contiene)
 		{
+			$input_no_contiene.value = no_contiene.toUpperCase();
 			for (const letra of no_contiene) {
 				dicc = diccionario_no_contiene_letra(dicc, letra);
 			}
@@ -148,6 +150,7 @@ function actualizar()
 			var letra = $input_letra.value.toLowerCase();
 			if (letra)
 			{
+				$input_letra.value = letra.toUpperCase();
 				dicc = diccionario_contiene_letra_posicion(dicc, letra, n);
 			}
 		}
