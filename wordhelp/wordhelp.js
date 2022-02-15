@@ -1,3 +1,25 @@
+function toggle_darkmode()
+{
+	var bootstrap_css = document.getElementById('bootstrap_css');
+	if (bootstrap_css)
+	{
+		if (bootstrap_css.href.includes('bootstrap.min.css'))
+		{
+			bootstrap_css.href = 'https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/css/bootstrap-night.min.css';
+
+			var btn_darkmode = document.getElementById('btn_darkmode');
+			if (btn_darkmode) btn_darkmode.innerHTML = '&#127774;';
+		}
+		else
+		{
+			bootstrap_css.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css';
+
+			var btn_darkmode = document.getElementById('btn_darkmode');
+			if (btn_darkmode) btn_darkmode.innerHTML = '&#127770;';
+		}
+	}
+}
+
 function calcular_probabilidades(dicc)
 {
 	var prob = {};
@@ -60,16 +82,27 @@ function diccionario_no_contiene_letra(dicc, letra)
 	return new_dicc;
 }
 
-function diccionario_contiene_letra(dicc, letra)
+function diccionario_contiene_letra(dicc, letra, n_veces)
 {
 	var new_dicc = [];
 	dicc.forEach(function (palabra) {
-		if (palabra.includes(letra)) new_dicc.push(palabra);
+		//if (palabra.includes(letra)) new_dicc.push(palabra);
+		if (contar_letra_en_palabra(letra, palabra) == n_veces) new_dicc.push(palabra);
 	});
 	return new_dicc;
 }
 
-function palabra_incluye_letra_posicion(palabra, letra, pos)
+function contar_letra_en_palabra(letra, palabra)
+{
+	var n = 0;
+	for (const c of palabra)
+	{
+		if (c == letra) n++;
+	}
+	return n;
+}
+
+function palabra_contiene_letra_posicion(palabra, letra, pos)
 {
 	var pos_aux = 1
 	for (const letra_aux of palabra) {
@@ -90,7 +123,7 @@ function diccionario_contiene_letra_posicion(dicc, letra, pos)
 {
 	var new_dicc = [];
 	dicc.forEach(function (palabra) {
-		if (palabra_incluye_letra_posicion(palabra, letra, pos))
+		if (palabra_contiene_letra_posicion(palabra, letra, pos))
 		{
 			new_dicc.push(palabra);
 		}
@@ -101,12 +134,16 @@ function diccionario_contiene_letra_posicion(dicc, letra, pos)
 function extraer_sugerencias(dicc, num)
 {
 	var sugerencias = [];
+	var dicc_2 = dicc.slice(0, num*num);
+	var shuffled_dicc = dicc_2.sort(function (a, b) {
+		return 0.5 - Math.random();
+	});
 	var i = 0;
 	while (i < num)
 	{
-		if (dicc[i])
+		if (shuffled_dicc[i])
 		{
-			sugerencias.push(dicc[i]);
+			sugerencias.push(shuffled_dicc[i]);
 		}
 		i++;
 	}
@@ -124,7 +161,8 @@ function actualizar()
 		if (contiene)
 		{
 			for (const letra of contiene) {
-				dicc = diccionario_contiene_letra(dicc, letra);
+				var n_veces = contar_letra_en_palabra(letra, contiene);
+				dicc = diccionario_contiene_letra(dicc, letra, n_veces);
 			}
 		}
 	}
