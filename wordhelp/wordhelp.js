@@ -133,21 +133,7 @@ function diccionario_contiene_letra_posicion(dicc, letra, pos)
 
 function extraer_sugerencias(dicc, num)
 {
-	var sugerencias = [];
-	var dicc_2 = dicc.slice(0, num*num);
-	var shuffled_dicc = dicc_2.sort(function (a, b) {
-		return 0.5 - Math.random();
-	});
-	var i = 0;
-	while (i < num)
-	{
-		if (shuffled_dicc[i])
-		{
-			sugerencias.push(shuffled_dicc[i]);
-		}
-		i++;
-	}
-	return sugerencias;
+	return dicc.slice(0, num);
 }
 
 function actualizar()
