@@ -16,16 +16,16 @@
 				<button type="button" class="btn btn-outline-dark mb-2 ms-2" id="btn_darkmode" onclick="toggle_darkmode()">&#127770;</button>
 			</div>
 		</div>
-		<div class="alert alert-warning bg-warning" style="--bs-bg-opacity: .75;">
-			<h5 class="card-title">Contiene</h5>
+		<div class="alert alert-warning bg-warning bg-opacity-75">
+			<h5>Contiene</h5>
 			<input type="text" class="form-control" id="input_contiene" pattern="[A-Za-zÑñ]*" oninput="this.reportValidity();" data-actualizar title="Letras de la A a la Z sin acentos ni espacios">
 		</div>
-		<div class="alert alert-secondary bg-secondary" style="--bs-bg-opacity: .75;">
-			<h5 class="card-title">No Contiene</h5>
+		<div class="alert alert-secondary bg-secondary bg-opacity-75">
+			<h5>No Contiene</h5>
 			<input type="text" class="form-control" id="input_no_contiene" pattern="[A-Za-zÑñ]*" oninput="this.reportValidity();" data-actualizar title="Letras de la A a la Z sin acentos ni espacios">
 		</div>
-		<div class="alert alert-success bg-success" style="--bs-bg-opacity: .75;">
-			<h5 class="card-title">Letras Exactas</h5>
+		<div class="alert alert-success bg-success bg-opacity-75">
+			<h5>Letras Exactas</h5>
 			<div class="d-flex">
 				<div>
 					<input type="text" class="form-control" id="input_letra_1" pattern="[A-Za-zÑñ]{1}" oninput="this.reportValidity();" data-actualizar title="Una letra de la A a la Z sin acentos" maxlength="1">
