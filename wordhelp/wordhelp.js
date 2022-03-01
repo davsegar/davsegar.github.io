@@ -169,6 +169,7 @@ function actualizar()
 		$input_letra = document.getElementById('input_letra_' + n.toString());
 		if ($input_letra)
 		{
+			$input_letra.value = $input_letra.value.substr(0,1);
 			var letra = $input_letra.value.toLowerCase();
 			if (letra)
 			{
