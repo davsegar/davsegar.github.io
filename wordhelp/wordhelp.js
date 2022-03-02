@@ -86,8 +86,7 @@ function diccionario_contiene_letra(dicc, letra, n_veces)
 {
 	var new_dicc = [];
 	dicc.forEach(function (palabra) {
-		//if (palabra.includes(letra)) new_dicc.push(palabra);
-		if (contar_letra_en_palabra(letra, palabra) == n_veces) new_dicc.push(palabra);
+		if (contar_letra_en_palabra(letra, palabra) >= n_veces) new_dicc.push(palabra);
 	});
 	return new_dicc;
 }
