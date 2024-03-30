@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Generar Nombres</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+	<div class="container-fluid my-2">
+		<div class="d-flex gap-2 my-2">
+			<button type="button" class="btn btn-primary" onclick="generate();">Generar</button>
+			<button type="button" class="btn btn-secondary" onclick="clean_container();">Limpiar</button>
+			<button type="button" class="btn btn-success" data-bs-toggle="collapse" data-bs-target="#cargar">Cargar Palabras</button>
+		</div>
+		<div id="cargar" class="collapse">
+			<textarea class="form-control" id="textarea" rows="10" onchange="load_words();"></textarea>
+		</div>
+		<div class="d-flex gap-2 my-2 flex-wrap">
+			<div>
+				<div class="input-group">
+					<span class="input-group-text">Longitud Minima</span>
+					<input type="number" class="form-control" id="min_len" value="5" style="width:8ch;">
+				</div>
+			</div>
+			<div>
+				<div class="input-group">
+					<span class="input-group-text">Longitud Maxima</span>
+					<input type="number" class="form-control" id="max_len" value="10" style="width:8ch;">
+				</div>
+			</div>
+			<div>
+				<div class="input-group">
+					<select class="form-control" id="select_mode" style="width:13ch;">
+						<option value="1" selected>Empieza Por</option>
+						<option value="2">Contiene</option>
+						<option value="3">Termina En</option>
+					</select>
+					<input type="text" class="form-control" id="mode_value" value="" style="width:10ch;">
+				</div>
+			</div>
+		</div>
+		<div class="list-group" id="container"></div>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script>
+		var generated_names = [];
+		var direct_dic = {};
+		var invert_dic = {};
+		var default_words = `
+			amazon alcampo activision audi abanca adidas alcatel asus
+			bankinter bankia
+			cocacola cajamar citroen canon colgate
+			dacia danone disney
+			eroski endesa ebay
+			ferrari fanta facebook
+			google glovo gatorade
+			honda huawei heineken
+			iberdrola intel ikea
+			jaguar jagermeister
+			kia kiwoko kaspersky
+			lancia lexus lego lenovo lotus
+			mapfre mercedes maserati mango mastercard
+			nescafe nintendo nokia nike netflix nikon
+			opel oracle oreo orbea
+			pepsi puleva pantene paypal panasonic
+			repsol renfe rowenta
+			santander seat subaru suzuki sony sega
+			telefonica tesla toyota
+			unicaja uber ubisoft
+			volvo vodafone visa viceroy
+			zara zalando`;
+
+		document.addEventListener('DOMContentLoaded', function () {
+			document.getElementById('textarea').value = default_words;
+			load_words();
+		});
+
+		function load_words()
+		{
+			var textarea = document.getElementById('textarea');
+			var words = textarea.value.trim().split(/[\s]+/).join(' ');
+			textarea.value = words;
+			words = words.toLowerCase();
+			direct_dic = gen_dic(words);
+			invert_dic = gen_dic(reverse_str(words));
+		}
+
+		function gen_dic(words)
+		{
+			var dic = {};
+			var words_arr = Array.from(new Set(words.split(/[\s]+/)));
+			words_arr.forEach(function (word) {
+				var letters = word.split('');
+				letters.forEach(function (letter, index) {
+					if (! dic[letter]) dic[letter] = [];
+					if (letters[index + 1])
+					{
+						var next = letters[index + 1];
+						if (letter == next) return;
+						if (is_consonant(letter) && is_consonant(next)) return;
+						dic[letter].push(next);
+					}
+				});
+			});
+			return dic;
+		}
+
+		function generate()
+		{
+			var name = gen_name();
+			var tries = 0;
+
+			while (generated_names.includes(name) && (tries < 20))
+			{
+				name = gen_name();
+				tries++;
+			}
+			if (! generated_names.includes(name)) generated_names.push(name);
+
+			var capitalized = name.charAt(0).toUpperCase() + name.slice(1);
+			var ig_href = 'https://www.instagram.com/' + name + '/';
+			var ig_label = 'Instagram';
+			var google_href = 'https://www.google.es/search?q=' + name;
+			var google_label = 'Google';
+
+			var container = document.getElementById('container');
+			container.innerHTML += `
+			<div class="list-group-item">
+				<div class="d-flex gap-2">
+					<div class="me-auto">${capitalized}</div>
+					<div><a href="${google_href}" target="_blank">${google_label}</a></div>
+					<div><a href="${ig_href}" target="_blank">${ig_label}</a></div>
+				</div>
+			</div>`;
+		}
+
+		function gen_name()
+		{
+			var name = '';
+			var min = parseInt(document.getElementById('min_len').value);
+			var max = parseInt(document.getElementById('max_len').value);
+			var len = Math.floor(Math.random() * (max - min + 1) + min);
+			var mode = parseInt(document.getElementById('select_mode').value);
+			var mode_value = document.getElementById('mode_value').value.trim().toLowerCase();
+
+			if (mode == 1)
+			{
+				name = mode_value;
+				while (name.length < len)
+				{
+					name = add_letter(name, direct_dic);
+				}
+			}
+			if (mode == 2)
+			{
+				name = mode_value;
+				while (name.length < len)
+				{
+					if (Math.floor(Math.random() * 2))
+					{
+						name = add_letter(name, direct_dic);
+					}
+					else
+					{
+						name = reverse_str(name);
+						name = add_letter(name, invert_dic);
+						name = reverse_str(name);
+					}
+				}
+			}
+			if (mode == 3)
+			{
+				name = mode_value;
+				name = reverse_str(name);
+				while (name.length < len)
+				{
+					name = add_letter(name, invert_dic);
+				}
+				name = reverse_str(name);
+			}
+
+			return name;
+		}
+
+		function add_letter(str, dic)
+		{
+			var next = '';
+
+			var current = get_last_letter(str);
+			if (current)
+			{
+				if (dic[current])
+				{
+					if (dic[current].length)
+					{
+						next = dic[current][Math.floor(Math.random() * dic[current].length)];
+					}
+				}
+			}
+
+			if (! next)
+			{
+				var letters = Object.keys(dic);
+				if (letters.length)
+				{
+					var ok = false;
+					var tries = 0;
+					while ((! ok) && (tries < 20))
+					{
+						next = letters[Math.floor(Math.random() * letters.length)];
+						ok = true;
+
+						if (dic[next].length == 0) ok = false;
+						if (current)
+						{
+							if (current == next) ok = false;
+							if (is_consonant(current) && is_consonant(next)) ok = false;
+						}
+
+						tries++;
+					}
+				}
+			}
+
+			if (! next) next = '#';
+
+			return str + next;
+		}
+
+		function get_last_letter(str)
+		{
+			if (str)
+			{
+				var arr = str.split('');
+				if (arr.length)
+				{
+					var last = arr.pop();
+					if (last) return last;
+				}
+			}
+			return '';
+		}
+
+		function reverse_str(str)
+		{
+			return str.split('').reverse().join('');
+		}
+
+		function is_vocal(letter)
+		{
+			return 'aeiou'.includes(letter);
+		}
+
+		function is_consonant(letter)
+		{
+			return 'qwrtypsdfghjklñzxcvbnm'.includes(letter);
+		}
+
+		function clean_container()
+		{
+			container.innerHTML = '';
+		}
+	</script>
+</body>
+</html>
